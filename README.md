@@ -1,18 +1,18 @@
 # Connect4
 
-Vier gewinnt im Terminal, programmiert in Rust.
+Connect Four in the terminal, written in Rust, with a bot you can play against.
 
-Du spielst als **Rot (R)** gegen einen Bot als **Gelb (Y)**. Wer anfängt, wird zufällig bestimmt.
+You play as **Red (R)** against the bot, which plays as **Yellow (Y)**. Who starts is chosen randomly.
 
-## Starten
+## Run
 
 ```sh
 cargo run --release
 ```
 
-## Spielen
+## How to play
 
-Man kann die Nummern 1-7 eingeben um eine Spalte auszuwählen.
+Enter a number from 1 to 7 to choose a column.
 
 ```
  1 2 3 4 5 6 7
@@ -26,23 +26,31 @@ Man kann die Nummern 1-7 eingeben um eine Spalte auszuwählen.
 └───────────────┘
 ```
 
-## Bot
+## How the bot works
 
-Der Bot (`src/bot.rs`) nutzt Minimax mit einer Tiefe von 5 und einer einfachen Bewertung.
+The bot (`src/bot.rs`) uses the minimax algorithm with a search depth of 5.
 
-### Wie er funktioniert
+**Looking ahead (`minimax`):** The bot tries out all possible move sequences up to 5 moves ahead. It always assumes that both players play their best move.
 
-**Vorausdenken (`minimax`):** Der Bot probiert alle Zugfolgen bis zu 5 Züge im Voraus durch. Er geht immer vom besten Move aus.
+**Rating a position (`evaluate`):** After 5 moves, the bot looks at every possible line of four on the board and gives points:
 
-**Stellung bewerten (`evaluate`):** Nach 5 Zügen zählt der Bot alle möglichen vierer Reihen auf dem Brett:
-
-| Reihe enthält | Punkte |
+| The line contains | Points |
 |---|---|
-| 3 eigene, keine gegnerischen | +5 |
-| 2 eigene, keine gegnerischen | +2 |
-| 3 gegnerische, keine eigenen | −5 |
-| 2 gegnerische, keine eigenen | −2 |
+| 3 own pieces, no opponent pieces | +5 |
+| 2 own pieces, no opponent pieces | +2 |
+| 3 opponent pieces, no own pieces | −5 |
+| 2 opponent pieces, no own pieces | −2 |
 
-### Grenzen
-- Fallen, die weiter als 5 Züge entfernt sind, sieht er nicht
-- Mit Alpha-Beta-Pruning könnte er schneller und tiefer rechnen
+A win counts much more than all of these. If the bot can win, it takes the fastest win.
+
+### Limitations
+
+- The bot can't see traps that are more than 5 moves away.
+- With alpha-beta pruning it could calculate faster and look further ahead.
+
+## What I learned
+
+- How minimax works and how to write it recursively
+- How to rate a game position with a simple scoring function
+- Really useful for building bots in general and for other games like chess.
+
